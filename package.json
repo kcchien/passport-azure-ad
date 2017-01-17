@@ -40,7 +40,8 @@
     "mocha": "^3.0.2",
     "nodeunit": "^0.9.1",
     "selenium-webdriver": "^3.0.0",
-    "server-graceful-shutdown": "^0.1.2"
+    "server-graceful-shutdown": "^0.1.2",
+    "aes-cbc-hmac-sha2": "*"
   },
   "dependencies": {
     "async": "^1.5.2",
