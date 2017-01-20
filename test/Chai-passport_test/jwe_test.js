@@ -4,8 +4,13 @@
 var chai = require('chai');
 var expect = chai.expect;
 var jwe = require('../../lib/jwe');
+var base64url = require('base64url');
+
+const TEST_TIMEOUT = 1000000; // 1000 seconds
 
 describe('policy checking', function() {
+  this.timeout(TEST_TIMEOUT);
+
   it('should pass with RSA-OAEP and A256GCM', function(done) {
     var jwk = { "kty":"RSA",
       "n":"oahUIoWw0K0usKNuOR6H4wkf4oBUXHTxRvgb48E-BVvxkeDNjbC4he8rUW\
@@ -104,4 +109,18 @@ describe('policy checking', function() {
     expect(decrypted).to.equal('Live long and pr');
     done();
   });
+
+  it('should pass with A128KW and A128CBC-HS256', function(done) {
+    var key = base64url.toBuffer('GawgguFyGrWKav7AX4VKUg');
+    var jweString = 'eyJhbGciOiJBMTI4S1ciLCJlbmMiOiJBMTI4Q0JDLUhTMjU2In0.\
+      6KB707dM9YTIgHtLvtgWQ8mKwboJW3of9locizkDTHzBC2IlrT1oOQ.\
+      AxY8DCtDaGlsbGljb3RoZQ.\
+      KDlTtXchhZTGufMYmOYGS4HffxPSUrfmqCHXaI9wOGY.\
+      U0m_YmjN04DJvceFICbCVQ';
+
+    var decrypted = jwe.decryt(jweString, key);
+
+    expect(decrypted).to.equal('Live long and pr');
+    done();
+  })
 });
