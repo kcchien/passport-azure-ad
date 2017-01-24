@@ -8,6 +8,8 @@ var base64url = require('base64url');
 
 const TEST_TIMEOUT = 1000000; // 1000 seconds
 
+var log =  { 'info': (msg) => { console.log(msg); } };
+
 describe('policy checking', function() {
   this.timeout(TEST_TIMEOUT);
 
@@ -55,14 +57,15 @@ describe('policy checking', function() {
       SdiwkIr3ajwQzaBtQD_A.\
       XFBoMYUZodetZdvTiFvSkQ";
 
-    var decrypted = jwe.decryt(jweString, jwk);
+    var decrypted;
+    jwe.decryt(jweString, jwk, log, (error, decrypted_token) => { console.log(error); decrypted = decrypted_token; });
 
     expect(decrypted).to.equal('The true sign of intelligence is not knowledge but imagination.');
     done();
   });
 
   it('should pass with RSA1_5 and A128CBC-HS256', function(done) {
-    var jwk = {"kty":"RSA",
+    var jwk = [{"kty":"RSA",
       "n":"sXchDaQebHnPiGvyDOAT4saGEUetSyo9MKLOoWFsueri23bOdgWp4Dy1Wl\
            UzewbgBHod5pcM9H95GQRV3JDXboIRROSBigeC5yjU1hGzHHyXss8UDpre\
            cbAYxknTcQkhslANGRUZmdTOQ5qTRsLAt6BTYuyvVRdhS8exSZEy_c4gs_\
@@ -91,7 +94,7 @@ describe('policy checking', function() {
       "qi":"eNho5yRBEBxhGBtQRww9QirZsB66TrfFReG_CcteI1aCneT0ELGhYlRlC\
            tUkTRclIfuEPmNsNDPbLoLqqCVznFbvdB7x-Tl-m0l_eFTj2KiqwGqE9PZ\
            B9nNTwMVvH3VRRSLWACvPnSiwP8N5Usy-WRXS-V7TbpxIhvepTfE0NNo"
-    };
+    }];
 
     var jweString = "eyJhbGciOiJSU0ExXzUiLCJlbmMiOiJBMTI4Q0JDLUhTMjU2In0.\
       UGhIOguC7IuEvf_NPVaXsGMoLOmwvc1GyqlIKOK1nN94nHPoltGRhWhw7Zx0-kFm\
@@ -104,7 +107,8 @@ describe('policy checking', function() {
       KDlTtXchhZTGufMYmOYGS4HffxPSUrfmqCHXaI9wOGY.\
       9hH0vgRfYgPnAHOd8stkvw";
 
-    var decrypted = jwe.decryt(jweString, jwk);
+    var decrypted;
+    jwe.decryt(jweString, jwk, log, (error, decrypted_token) => { decrypted = decrypted_token; });
 
     expect(decrypted).to.equal('Live long and pr');
     done();
@@ -118,7 +122,8 @@ describe('policy checking', function() {
       KDlTtXchhZTGufMYmOYGS4HffxPSUrfmqCHXaI9wOGY.\
       U0m_YmjN04DJvceFICbCVQ';
 
-    var decrypted = jwe.decryt(jweString, key);
+    var decrypted;
+    jwe.decryt(jweString, jwk, log, (error, decrypted_token) => { decrypted = decrypted_token; });
 
     expect(decrypted).to.equal('Live long and pr');
     done();
