@@ -8,13 +8,13 @@ var base64url = require('base64url');
 
 const TEST_TIMEOUT = 1000000; // 1000 seconds
 
-var log =  { 'info': (msg) => { console.log(msg); } };
+var log =  { 'info': (msg) => { } };
 
 describe('policy checking', function() {
   this.timeout(TEST_TIMEOUT);
 
   it('should pass with RSA-OAEP and A256GCM', function(done) {
-    var jwk = { "kty":"RSA",
+    var jwk = [{ "kty":"RSA",
       "n":"oahUIoWw0K0usKNuOR6H4wkf4oBUXHTxRvgb48E-BVvxkeDNjbC4he8rUW\
            cJoZmds2h7M70imEVhRU5djINXtqllXI4DFqcI1DgjT9LewND8MW2Krf3S\
            psk_ZkoFnilakGygTwpZ3uesH-PFABNIUYpOiN15dsQRkgr0vEhxN92i2a\
@@ -43,7 +43,7 @@ describe('policy checking', function() {
       "qi":"VIMpMYbPf47dT1w_zDUXfPimsSegnMOA1zTaX7aGk_8urY6R8-ZW1FxU7\
            AlWAyLWybqq6t16VFd7hQd0y6flUK4SlOydB61gwanOsXGOAOv82cHq0E3\
            eL4HrtZkUuKvnPrMnsUUFlfUdybVzxyjz9JF_XyaY14ardLSjf4L_FNY"
-    };
+    }];
 
     var jweString = "eyJhbGciOiJSU0EtT0FFUCIsImVuYyI6IkEyNTZHQ00ifQ.\
       OKOawDo13gRp2ojaHV7LFpZcgV7T6DVZKTyKOMTYUmKoTCVJRgckCL9kiMT03JGe\
@@ -58,7 +58,7 @@ describe('policy checking', function() {
       XFBoMYUZodetZdvTiFvSkQ";
 
     var decrypted;
-    jwe.decryt(jweString, jwk, log, (error, decrypted_token) => { console.log(error); decrypted = decrypted_token; });
+    jwe.decryt(jweString, jwk, log, (error, decrypted_token) => { decrypted = decrypted_token; });
 
     expect(decrypted).to.equal('The true sign of intelligence is not knowledge but imagination.');
     done();
@@ -110,12 +110,12 @@ describe('policy checking', function() {
     var decrypted;
     jwe.decryt(jweString, jwk, log, (error, decrypted_token) => { decrypted = decrypted_token; });
 
-    expect(decrypted).to.equal('Live long and pr');
+    expect(decrypted).to.equal('Live long and prosper.');
     done();
   });
 
   it('should pass with A128KW and A128CBC-HS256', function(done) {
-    var key = base64url.toBuffer('GawgguFyGrWKav7AX4VKUg');
+    var jwk = [ { 'kty': 'oct', 'k': 'GawgguFyGrWKav7AX4VKUg' }];
     var jweString = 'eyJhbGciOiJBMTI4S1ciLCJlbmMiOiJBMTI4Q0JDLUhTMjU2In0.\
       6KB707dM9YTIgHtLvtgWQ8mKwboJW3of9locizkDTHzBC2IlrT1oOQ.\
       AxY8DCtDaGlsbGljb3RoZQ.\
@@ -125,7 +125,7 @@ describe('policy checking', function() {
     var decrypted;
     jwe.decryt(jweString, jwk, log, (error, decrypted_token) => { decrypted = decrypted_token; });
 
-    expect(decrypted).to.equal('Live long and pr');
+    expect(decrypted).to.equal('Live long and prosper.');
     done();
   })
 });
